@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-if gcc -Wall -Wextra -pedantic -o lab-3.out main.c; then
+if make; then
     test_number=0
     current_test=""
     
@@ -10,7 +10,7 @@ if gcc -Wall -Wextra -pedantic -o lab-3.out main.c; then
             if [ -n "$current_test" ]; then
                 test_number=$((test_number+1))
                 echo -e "\033[31mRunning test $test_number\033[0m"
-                echo -e "$current_test" | ./lab-3.out
+                echo -e "$current_test" | ./coursework
                 sleep 1.5
             fi
             current_test=""
@@ -22,11 +22,11 @@ if gcc -Wall -Wextra -pedantic -o lab-3.out main.c; then
     if [ -n "$current_test" ]; then
         test_number=$((test_number+1))
         echo -e "\033[31mRunning test $test_number\033[0m"
-        echo -e "$current_test" | ./lab-3.out
+        echo -e "$current_test" | ./coursework
     fi
 else
     echo "Ошибка компиляции программы."
 fi
 
-rm -f lab-3.out
+make clean
 
