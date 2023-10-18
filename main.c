@@ -3,27 +3,38 @@
 #include <string.h>
 #include <ctype.h>
 
-char** split_text(char* text, int* num_sentences, const char* spliters);
-void remove_lead_spaces(char* str);
+typedef struct {
+    char* sentence;
+} Sentence;
+
+
+typedef struct {
+    Sentence* sentences;
+    int num_sentences; 
+} Text;
+
 char* get_text_input();
+void remove_lead_spaces(char* str);
+Text split_text(char* raw_text, const char* spliters);
+void free_text(Text text);
+
 
 int main(void) {
-	int num_sentences = 0;
 	const char* spliters = ".?!";
 	printf("%s\n", "Course work for option 5.11, created by Egor Grebnev.");
-	char* text = get_text_input();
-	char** splitted_text = split_text(text, &num_sentences, spliters);
+	char* raw_text = get_text_input();
 
+	Text text = split_text(raw_text, spliters);
 
-	for (int i = 0; i < num_sentences; i++) {
-		printf("Предложение %d:%s\n",i+1, splitted_text[i]);
-		free(splitted_text[i]);
-	}
-	//       printf("Количество предложений до %d и количество предложений после %d\n", num_sentences - 1, result_num_sentences - 1);
-	free(splitted_text);
-	free(text);
+	for (int i = 0; i < text.num_sentences; ++i) {
+        printf("Sentence №%d:%s\n", (i+1), text.sentences[i].sentence);
+    }
+	free_text(text);
+	free(raw_text);
 	return 0;
 }
+
+
 
 char* get_text_input() {
 	int capacity = 1, end=0, size = 0;
@@ -46,32 +57,33 @@ char* get_text_input() {
 	return text;
 }
 
-char** split_text(char* text, int* num_sentences, const char* spliters) {
-	int count_sentences = 0;
-	int end_index = 0;
-	char** splitted_text = malloc(sizeof(char*));
+Text split_text(char *raw_text, const char *spliters) {
+    int end_index = 0;
+    Text text;
+    text.num_sentences = 0;
+    text.sentences = malloc(sizeof(Sentence));
 
-	for (int i = 0; i <= (int)strlen(text); i++) {
-		if (strchr(spliters, text[i]) != NULL) {
-			count_sentences++;
+    for (int i = 0; i <= (int)strlen(raw_text); i++) {
+        if (strchr(spliters, raw_text[i]) != NULL || raw_text[i] == '\0') {
+            text.num_sentences++;
 
-			splitted_text = realloc(splitted_text, count_sentences * sizeof(char*));
-			splitted_text[count_sentences - 1] = malloc((end_index + 2) * sizeof(char));
+            text.sentences = realloc(text.sentences, text.num_sentences * sizeof(Sentence));
+            text.sentences[text.num_sentences - 1].sentence = malloc((end_index + 2) * sizeof(char));
 
-			int chr_counter = 0;
-			for (int j = end_index; j >= 0; j--) {
-				splitted_text[count_sentences - 1][chr_counter++] = text[i - j];
-			}
-			splitted_text[count_sentences - 1][chr_counter] = '\0';
-			remove_lead_spaces(splitted_text[count_sentences - 1]);
-			end_index = 0;
-			continue;
-		}
-		end_index++;
-	}
+            int chr_counter = 0;
+            for (int j = end_index; j >= 0; j--) {
+                text.sentences[text.num_sentences - 1].sentence[chr_counter++] = raw_text[i - j];
+            }
+            text.sentences[text.num_sentences - 1].sentence[chr_counter] = '\0';
+            remove_lead_spaces(text.sentences[text.num_sentences - 1].sentence);
+            end_index = 0;
+            continue;
+        }
+        end_index++;
+    }
 
-	*num_sentences = count_sentences - 1;
-	return splitted_text;
+    text.num_sentences = text.num_sentences - 1;
+    return text;
 }
 void remove_lead_spaces(char* str) {
         char* start = str;
@@ -81,4 +93,10 @@ void remove_lead_spaces(char* str) {
         }
 
         memmove(str, start, strlen(start) + 1);
+}
+void free_text(Text text) {
+    for (int i = 0; i < text.num_sentences; ++i) {
+        free(text.sentences[i].sentence);
+    }
+    free(text.sentences);
 }
