@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include "get_text_input.h"
+#include "remove_lead_spaces.h"
 
 typedef struct {
     char* sentence;
@@ -13,49 +15,27 @@ typedef struct {
     int num_sentences; 
 } Text;
 
-char* get_text_input();
-void remove_lead_spaces(char* str);
 Text split_text(char* raw_text, const char* spliters);
 void free_text(Text text);
-
+void print_text(Text text);
+void remove_repeats(Text* text);
 
 int main(void) {
-	const char* spliters = ".?!";
+	const char* spliters = ".?!;";
 	printf("%s\n", "Course work for option 5.11, created by Egor Grebnev.");
 	char* raw_text = get_text_input();
 
 	Text text = split_text(raw_text, spliters);
 
-	for (int i = 0; i < text.num_sentences; ++i) {
-        printf("Sentence №%d:%s\n", (i+1), text.sentences[i].sentence);
-    }
+    remove_repeats(&text);
+
+    print_text(text);
+	
 	free_text(text);
 	free(raw_text);
 	return 0;
 }
 
-
-
-char* get_text_input() {
-	int capacity = 1, end=0, size = 0;
-	char ch;
-	char* text = malloc(capacity * sizeof(char));
-	while ((ch = getchar()) && (end < 2)) {
-		if (ch == '\n') 
-			end++;
-		
-		else {
-			end = 0;
-			if (size >= capacity) {
-				capacity *= 2;
-				text = realloc(text, capacity * sizeof(char));
-			}
-			text[size++] = ch;
-		} 
-	}
-	text = realloc(text, (capacity+1)*sizeof(char));
-	return text;
-}
 
 Text split_text(char *raw_text, const char *spliters) {
     int end_index = 0;
@@ -85,15 +65,25 @@ Text split_text(char *raw_text, const char *spliters) {
     text.num_sentences = text.num_sentences - 1;
     return text;
 }
-void remove_lead_spaces(char* str) {
-        char* start = str;
-
-        while (*start && (*start == ' ' || *start == '\t' ||  *start == '\n')) {
-                start++;
+void remove_repeats(Text* text) {
+    int newSize = text->num_sentences;
+    for (int i = 0; i < newSize; ++i) {
+        for (int j = i + 1; j < newSize; ++j) {
+            if (strcasecmp(text->sentences[i].sentence, text->sentences[j].sentence) == 0) {
+                free(text->sentences[j].sentence);
+                text->sentences[j].sentence = text->sentences[--newSize].sentence;
+                --j;
+            }
         }
-
-        memmove(str, start, strlen(start) + 1);
+    }
+    text->num_sentences = newSize;
 }
+void print_text(Text text){
+    for (int i = 0; i < text.num_sentences; ++i) {
+        printf("Sentence №%d:%s\n", (i+1), text.sentences[i].sentence);
+    }
+}
+
 void free_text(Text text) {
     for (int i = 0; i < text.num_sentences; ++i) {
         free(text.sentences[i].sentence);
