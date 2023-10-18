@@ -1,18 +1,22 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -pedantic
-SRC = main.c get_text_input.c remove_lead_spaces.c
-OBJ = $(SRC:.c=.o)
-OUT = coursework
+CFLAGS = -Iinclude -Wall -Wextra
 
-all: $(OUT)
-	$(CC) $(CFLAGS) -o $@ $(OBJ)
+SRCDIR = src
+INCDIR = include
+OBJDIR = obj
 
+SOURCES = $(wildcard $(SRCDIR)/*.c)
+OBJECTS = $(patsubst $(SRCDIR)/%.c, $(OBJDIR)/%.o, $(SOURCES))
+EXECUTABLE = coursework
 
-$(OUT): $(OBJ)
-	$(CC) $(CFLAGS) -o $@ $^
-	
-%.o: %.c
-	$(CC) $(CFLAGS) -c -o $@ $<
+all: $(EXECUTABLE)
+
+$(EXECUTABLE): $(OBJECTS)
+	$(CC) $(CFLAGS) $(OBJECTS) -o $@
+
+$(OBJDIR)/%.o: $(SRCDIR)/%.c
+	@mkdir -p $(OBJDIR)
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -f all $(OUT) $(OBJ)
+	rm -rf $(OBJDIR) $(EXECUTABLE)
