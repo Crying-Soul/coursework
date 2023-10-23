@@ -1,3 +1,3 @@
 #include <datastructures.h>
-void freeText(Text text);
-void printText(Text text);
+void freeText(Text* text);
+void printText(Text* text);

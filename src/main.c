@@ -6,64 +6,49 @@
 #include "structure_functions.h"
 #include "datastructures.h"
 
+#define SENTENCE_SPLITTERS ".?!;"
 
-Text split_text(char* raw_text, const char* spliters);
+
 
 
 int main(void) {
-	const char* spliters = ".?!;";
+	
 	int nextMove;
-    printf("%s\n", "Course work for option 5.11, created by Egor Grebnev.");
-	char* raw_text = getTextInput();
-
-	Text text = split_text(raw_text, spliters);
-    removeRepeats(&text);
-    //print_text(text);
-	scanf("%d", &nextMove);
-
+    printf("\033[92m%s\033[0m\n", "Course work for option 5.11, created by Egor Grebnev.");
+    scanf("%d", &nextMove);
+	
+	
+    
     switch (nextMove)
     {
-    case 3:
-        removeUpperCaseLettersText(&text);
-        print_text(text);
-        break;
-    
-    default:
-        break;
+        case 0:
+            printText(createTextStruct(SENTENCE_SPLITTERS));
+            break;
+        case 1:
+            printf("In process...");
+            break;
+        case 2:
+            printf("In process...");
+            break;
+        case 3:
+            Text* text = createTextStruct(SENTENCE_SPLITTERS);
+            removeUpperCaseLettersText(text);
+            printText(text);
+            break;
+        case 4:
+            printf("In process...");
+            break;
+        case 5:
+            printf("In process...");
+            break;
+        default:
+            printf("Error: \033[91m%s\033[0m","Undefined function, try 0-5\n");
+            break;
     }
 
-	free_text(text);
-	free(raw_text);
+	// freeText(text);
+	// free(raw_text);
 	return 0;
 }
 
-
-Text split_text(char *raw_text, const char *spliters) {
-    int end_index = 0;
-    Text text;
-    text.num_sentences = 0;
-    text.sentences = malloc(sizeof(Sentence));
-
-    for (int i = 0; i <= (int)strlen(raw_text); i++) {
-        if (strchr(spliters, raw_text[i]) != NULL || raw_text[i] == '\0') {
-            text.num_sentences++;
-
-            text.sentences = realloc(text.sentences, text.num_sentences * sizeof(Sentence));
-            text.sentences[text.num_sentences - 1].sentence = malloc((end_index + 2) * sizeof(char));
-
-            int chr_counter = 0;
-            for (int j = end_index; j >= 0; j--) {
-                text.sentences[text.num_sentences - 1].sentence[chr_counter++] = raw_text[i - j];
-            }
-            text.sentences[text.num_sentences - 1].sentence[chr_counter] = '\0';
-            removeLeadSpaces(text.sentences[text.num_sentences - 1].sentence);
-            end_index = 0;
-            continue;
-        }
-        end_index++;
-    }
-
-    text.num_sentences = text.num_sentences - 1;
-    return text;
-}
 
