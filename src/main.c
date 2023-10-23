@@ -2,28 +2,36 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include "get_text_input.h"
-#include "remove_lead_spaces.h"
-#include "remove_repeats.h"
+#include "text_processing.h"
+#include "structure_functions.h"
 #include "datastructures.h"
 
 
 Text split_text(char* raw_text, const char* spliters);
-void free_text(Text text);
-void print_text(Text text);
-void remove_repeats(Text* text);
+
 
 int main(void) {
 	const char* spliters = ".?!;";
-	printf("%s\n", "Course work for option 5.11, created by Egor Grebnev.");
-	char* raw_text = get_text_input();
+	int nextMove;
+    printf("%s\n", "Course work for option 5.11, created by Egor Grebnev.");
+	char* raw_text = getTextInput();
 
 	Text text = split_text(raw_text, spliters);
+    removeRepeats(&text);
+    //print_text(text);
+	scanf("%d", &nextMove);
 
-    remove_repeats(&text);
+    switch (nextMove)
+    {
+    case 3:
+        removeUpperCaseLettersText(&text);
+        print_text(text);
+        break;
+    
+    default:
+        break;
+    }
 
-    print_text(text);
-	
 	free_text(text);
 	free(raw_text);
 	return 0;
@@ -48,7 +56,7 @@ Text split_text(char *raw_text, const char *spliters) {
                 text.sentences[text.num_sentences - 1].sentence[chr_counter++] = raw_text[i - j];
             }
             text.sentences[text.num_sentences - 1].sentence[chr_counter] = '\0';
-            remove_lead_spaces(text.sentences[text.num_sentences - 1].sentence);
+            removeLeadSpaces(text.sentences[text.num_sentences - 1].sentence);
             end_index = 0;
             continue;
         }
@@ -59,15 +67,3 @@ Text split_text(char *raw_text, const char *spliters) {
     return text;
 }
 
-void print_text(Text text){
-    for (int i = 0; i < text.num_sentences; ++i) {
-        printf("Sentence №%d:%s\n", (i+1), text.sentences[i].sentence);
-    }
-}
-
-void free_text(Text text) {
-    for (int i = 0; i < text.num_sentences; ++i) {
-        free(text.sentences[i].sentence);
-    }
-    free(text.sentences);
-}
