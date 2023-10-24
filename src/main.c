@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <locale.h>
 #include "text_processing.h"
 #include "datastructures.h"
 
@@ -7,6 +8,7 @@ void printHelp();
 void userInputProcessing(int nextMove, Text *text);
 int main(void)
 {
+    setlocale(LC_ALL, "ru_RU.UTF-8");
     int nextMove;
     printf("\033[92m%s\033[0m\n", "Course work for option 5.11, created by Egor Grebnev.");
     scanf("%d", &nextMove);
