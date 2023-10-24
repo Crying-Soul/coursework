@@ -2,7 +2,7 @@
 
 make
 echo "----------------------"
-./coursework < ./tests/test-1
+./coursework < tests/test-cyrillic
 echo "----------------------"
 make clean
 
