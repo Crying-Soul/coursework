@@ -65,14 +65,18 @@ void removeRepeats(Text *text)
 			if (strcasecmp(text->sentences[i].sentence, text->sentences[j].sentence) == 0)
 			{
 				free(text->sentences[j].sentence);
-				text->sentences[j].sentence = text->sentences[--newSize].sentence;
+				for (int k = j; k < newSize - 1; ++k)
+				{
+					text->sentences[k] = text->sentences[k + 1];
+				}
+				--newSize;
 				--j;
 			}
 		}
 	}
+
 	text->num_sentences = newSize;
 }
-
 void removeLeadSpaces(char *str)
 {
 	char *start = str;
@@ -94,6 +98,7 @@ Text split_text(char *raw_text, const char *spliters)
 	{
 		if (strchr(spliters, raw_text[i]) != NULL)
 		{
+
 			text.num_sentences++;
 
 			text.sentences = realloc(text.sentences, text.num_sentences * sizeof(Sentence));
@@ -115,31 +120,56 @@ Text split_text(char *raw_text, const char *spliters)
 	return text;
 }
 
-Text* createTextStruct(const char *spliters)
+Text *createTextStruct(const char *spliters)
 {
 	char *raw_text = getTextInput();
-	Text *text = (Text *)malloc(sizeof(Text)); 
+	Text *text = (Text *)malloc(sizeof(Text));
 
 	*text = split_text(raw_text, spliters);
 	removeRepeats(text);
 
-	free(raw_text); 
+	free(raw_text);
 	return text;
 }
 
-int сyrillicCounter(Sentence* sentence){
+int cyrillicCounter(const Sentence *sentence)
+{
 	int counter = 0;
-	char* str = sentence->sentence;
-	for (int i = 0; i < (int)strlen(str); i++){
-		if ((str[i] >= -64 && str[i] <= -1) || (str[i] >= -128 && str[i] <= -65))
+	const char *str = sentence->sentence;
+	while (*str)
+	{
+		if ((*str & 0xC0) == 0xC0 && (*(str + 1) & 0x80) == 0x80)
 			counter++;
-
+		str++;
 	}
 
-	return counter;
+	return counter / 2;
 }
-void sortTextByCyrillic(Text* text){
-	for (int i = 0; i < text->num_sentences - 1;i++){
-		printf("%d %s\n", сyrillicCounter(&(text->sentences[i])), text->sentences[i].sentence);
-	}
+int compareSentences(const void *sentenceA, const void *sentenceB)
+{
+	return cyrillicCounter((const Sentence *)sentenceB) - cyrillicCounter((const Sentence *)sentenceA);
+}
+
+void sortTextByCyrillic(Text *text)
+{
+	qsort(text->sentences, text->num_sentences, sizeof(Sentence), compareSentences);
+}
+
+void removeWithSpecialChars(Text *text) {
+    int validSentenceCount = 0;
+	const char* specialChars = "!@#$%^&*()_+-={}[]|\\:;\"'<>,?/";
+    for (int i = 0; i < text->num_sentences; ++i) {
+        if (strpbrk(text->sentences[i].sentence, specialChars) != NULL ){
+        
+            text->sentences[validSentenceCount] = text->sentences[i];
+            validSentenceCount++;
+        } else {
+            
+            free(text->sentences[i].sentence);
+        }
+    }
+
+
+    text->num_sentences = validSentenceCount;
+    text->sentences = realloc(text->sentences, sizeof(Sentence) * validSentenceCount);
 }

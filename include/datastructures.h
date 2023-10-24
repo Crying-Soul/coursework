@@ -9,4 +9,7 @@ typedef struct {
     Sentence* sentences;
     int num_sentences; 
 } Text;
+
+void freeText(Text* text);
+void printText(Text* text);
 #endif

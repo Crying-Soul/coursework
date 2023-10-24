@@ -7,4 +7,6 @@ void removeUpperCaseLettersText(Text* text);
 Text split_text(char* raw_text, const char* spliters);
 Text* createTextStruct(const char* spliters);
 void sortTextByCyrillic(Text* text);
-int cyrillicCounter(Sentence* sentence);
+int cyrillicCounter(const Sentence *sentence);
+int compareSentences(const void *a, const void *b);
+void removeWithSpecialChars(Text* text);
