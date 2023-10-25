@@ -113,18 +113,21 @@ Text split_text(char *raw_text, const char *spliters)
 			}
 			text.sentences[text.num_sentences - 1].sentence[chr_counter] = '\0';
 			removeLeadSpaces(text.sentences[text.num_sentences - 1].sentence);
+			
 			end_index = 0;
 			continue;
 		}
 		end_index++;
 	}
+	printf("\n");
+	printf("\n");
 	return text;
 }
 
 Text *createTextStruct(const char *spliters)
 {
 	char *raw_text = getTextInput();
-	Text *text = (Text *)malloc(sizeof(Text));
+	Text *text = malloc(sizeof(Text));
 
 	*text = split_text(raw_text, spliters);
 	removeRepeats(text);
@@ -156,7 +159,7 @@ void sortTextByCyrillic(Text *text)
 	qsort(text->sentences, text->num_sentences, sizeof(Sentence), compareSentences);
 }
 
-void removeWithSpecialChars(Text *text)
+void removeWithoutSpecialChars(Text *text)
 {
 	int validSentenceCount = 0;
 	const char *specialChars = "!@#$%^&*()_+-={}[]|\\:;\"'<>,?/";
@@ -178,7 +181,6 @@ void removeWithSpecialChars(Text *text)
 	text->num_sentences = validSentenceCount;
 	text->sentences = realloc(text->sentences, sizeof(Sentence) * validSentenceCount);
 }
-
 void findSubStr(Text *text)
 {
 	time_t currentTime = time(NULL);

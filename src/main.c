@@ -36,11 +36,11 @@ void userInputProcessing(int nextMove, Text *text)
         printText(text);
         break;
     case 4:
-        removeWithSpecialChars(text);
+        removeWithoutSpecialChars(text);
         printText(text);
         break;
     default:
-        printf("Error: \033[91m%s\033[0m", "Undefined function, try 0-5\n");
+        printf("\033[1;33mError:\033[0m \033[91m%s\033[0m", "Undefined function, try 0-5\n");
         break;
     }
 }
@@ -62,7 +62,7 @@ void processInput()
         return;
     }
 
-    printf("Error: \033[91m%s\033[0m", "Print numeric function\n");
+    printf("\033[1;33mError:\033[0m  \033[91m%s\033[0m", "Print numeric function\n");
 }
 void printHelp()
 {

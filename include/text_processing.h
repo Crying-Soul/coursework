@@ -9,5 +9,5 @@ Text* createTextStruct(const char* spliters);
 void sortTextByCyrillic(Text* text);
 int cyrillicCounter(const Sentence *sentence);
 int compareSentences(const void *a, const void *b);
-void removeWithSpecialChars(Text* text);
+void removeWithoutSpecialChars(Text* text);
 void findSubStr(Text* text);
