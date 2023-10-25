@@ -1,26 +1,20 @@
 #include <stdio.h>
 #include <locale.h>
+#include <ctype.h>
 #include "text_processing.h"
 #include "datastructures.h"
 
 #define SENTENCE_SPLITTERS ".?!;"
+
 void printHelp();
+void processInput();
 void userInputProcessing(int nextMove, Text *text);
+
 int main(void)
 {
     setlocale(LC_ALL, "ru_RU.UTF-8");
-    int nextMove;
     printf("\033[92m%s\033[0m\n", "Course work for option 5.11, created by Egor Grebnev.");
-    scanf("%d", &nextMove);
-
-    if (nextMove != 5)
-    {
-        Text *text = createTextStruct(SENTENCE_SPLITTERS);
-        userInputProcessing(nextMove, text);
-        freeText(text);
-        return 0;
-    }
-    printHelp();
+    processInput();
     return 0;
 }
 void userInputProcessing(int nextMove, Text *text)
@@ -31,7 +25,7 @@ void userInputProcessing(int nextMove, Text *text)
         printText(text);
         break;
     case 1:
-        printf("In process...");
+        findSubStr(text);
         break;
     case 2:
         sortTextByCyrillic(text);
@@ -49,6 +43,26 @@ void userInputProcessing(int nextMove, Text *text)
         printf("Error: \033[91m%s\033[0m", "Undefined function, try 0-5\n");
         break;
     }
+}
+void processInput()
+{
+    char charMove = getchar();
+
+    if (isdigit(charMove))
+    {
+        int intMove = charMove - '0';
+        if (intMove != 5)
+        {
+            Text *text = createTextStruct(SENTENCE_SPLITTERS);
+            userInputProcessing(intMove, text);
+            freeText(text);
+            return;
+        }
+        printHelp();
+        return;
+    }
+
+    printf("Error: \033[91m%s\033[0m", "Print numeric function\n");
 }
 void printHelp()
 {

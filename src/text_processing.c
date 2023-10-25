@@ -2,6 +2,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <stdio.h>
+#include <time.h>
 #include "text_processing.h"
 #include "datastructures.h"
 
@@ -94,7 +95,7 @@ Text split_text(char *raw_text, const char *spliters)
 	text.num_sentences = 0;
 	text.sentences = malloc(sizeof(Sentence));
 
-	for (int i = 0; i <= (int)strlen(raw_text); i++)
+	for (size_t i = 0; i <= strlen(raw_text); i++)
 	{
 		if (strchr(spliters, raw_text[i]) != NULL)
 		{
@@ -155,21 +156,100 @@ void sortTextByCyrillic(Text *text)
 	qsort(text->sentences, text->num_sentences, sizeof(Sentence), compareSentences);
 }
 
-void removeWithSpecialChars(Text *text) {
-    int validSentenceCount = 0;
-	const char* specialChars = "!@#$%^&*()_+-={}[]|\\:;\"'<>,?/";
-    for (int i = 0; i < text->num_sentences; ++i) {
-        if (strpbrk(text->sentences[i].sentence, specialChars) != NULL ){
-        
-            text->sentences[validSentenceCount] = text->sentences[i];
-            validSentenceCount++;
-        } else {
-            
-            free(text->sentences[i].sentence);
-        }
-    }
+void removeWithSpecialChars(Text *text)
+{
+	int validSentenceCount = 0;
+	const char *specialChars = "!@#$%^&*()_+-={}[]|\\:;\"'<>,?/";
+	for (int i = 0; i < text->num_sentences; ++i)
+	{
+		if (strpbrk(text->sentences[i].sentence, specialChars) != NULL)
+		{
 
+			text->sentences[validSentenceCount] = text->sentences[i];
+			validSentenceCount++;
+		}
+		else
+		{
 
-    text->num_sentences = validSentenceCount;
-    text->sentences = realloc(text->sentences, sizeof(Sentence) * validSentenceCount);
+			free(text->sentences[i].sentence);
+		}
+	}
+
+	text->num_sentences = validSentenceCount;
+	text->sentences = realloc(text->sentences, sizeof(Sentence) * validSentenceCount);
 }
+
+void findSubStr(Text *text)
+{
+	time_t currentTime = time(NULL);
+	struct tm *localTime = localtime(&currentTime);
+	int currentMinutes = localTime->tm_hour * 60 + localTime->tm_min;
+	for (int i = 0; i < text->num_sentences; i++)
+	{
+		if (strlen(text->sentences[i].sentence) > 5)
+		{
+			for (size_t j = 0; j < strlen(text->sentences[i].sentence) - 5; j++)
+			{
+				if (isdigit(text->sentences[i].sentence[j]) && isdigit(text->sentences[i].sentence[j + 1]) && text->sentences[i].sentence[j + 2] == ':' && isdigit(text->sentences[i].sentence[j + 3]) && isdigit(text->sentences[i].sentence[j + 4]))
+				{
+					char hours_s[2];
+					char mins_s[2];
+					hours_s[0] = text->sentences[i].sentence[j];
+					hours_s[1] = text->sentences[i].sentence[j + 1];
+
+					mins_s[0] = text->sentences[i].sentence[j];
+					mins_s[1] = text->sentences[i].sentence[j + 1];
+					int mins = atoi(mins_s);
+					int hours = atoi(hours_s);
+					int totalMinutes = hours * 60 + mins;
+
+					printf("Подстрока в предложении %d, минут до текущего времени: %d\n", i + 1, totalMinutes - currentMinutes);
+					break;
+				}
+			}
+		}
+		else
+			continue;
+	}
+}
+
+// void findSubStr(Text *text)
+// {
+// 	time_t currentTime = time(NULL);
+// 	struct tm *localTime = localtime(&currentTime);
+// 	int currentMinutes = localTime->tm_hour * 60 + localTime->tm_min;
+
+// 	for (int i = 0; i < text->num_sentences; ++i)
+// 	{
+
+// 		//char *timeToken = strtok(text->sentences[i].sentence, ":");
+// 		for (size_t j = 0; j < strlen(text->sentences[i].sentence) - 5; j++)
+// 		{
+// 			printf("%c", text->sentences[i].sentence[j]);
+// 			// if (isdigit(sentence[j]) && isdigit(sentence[j+1]) && sentence[j+2] == ':' && isdigit(sentence[j+3]) && isdigit(sentence[j+4])){
+// 			// 	printf("%c", sentence[j]);
+// 			// 	printf("%c", sentence[j+1]);
+// 			// 	printf("%c", sentence[j+2]);
+// 			// 	printf("%c", sentence[j+3]);
+// 			// 	printf("%c", sentence[j+4]);
+// 			// 	break;
+// 			// }
+// 		}
+// 		printf("\n");
+
+// 		// if (timeToken != NULL)
+// 		// {
+// 		// 	int hours = atoi(timeToken);
+// 		// 	printf("%d", hours);
+// 		// 	timeToken = strtok(NULL, ":");
+// 		// 	if (timeToken != NULL)
+// 		// 	{
+// 		// 		int minutes = atoi(timeToken);
+// 		// 		int totalMinutes = hours * 60 + minutes;
+
+// 		// 		int minutesDifference = totalMinutes - currentMinutes;
+// 		// 		printf("Подстрока в предложении %d, минут до текущего времени: %d\n", i + 1, minutesDifference);
+// 		// 	}
+// 		// }
+// 	}
+// }
