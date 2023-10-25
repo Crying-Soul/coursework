@@ -184,72 +184,35 @@ void findSubStr(Text *text)
 	time_t currentTime = time(NULL);
 	struct tm *localTime = localtime(&currentTime);
 	int currentMinutes = localTime->tm_hour * 60 + localTime->tm_min;
+
 	for (int i = 0; i < text->num_sentences; i++)
 	{
-		if (strlen(text->sentences[i].sentence) > 5)
+		char *sentence = text->sentences[i].sentence;
+		size_t sentenceLength = strlen(sentence);
+
+		if (sentenceLength < 5)
+			continue;
+
+		for (size_t j = 0; j < sentenceLength - 4; j++)
 		{
-			for (size_t j = 0; j < strlen(text->sentences[i].sentence) - 5; j++)
+			if (isdigit(sentence[j]) && isdigit(sentence[j + 1]) &&
+				sentence[j + 2] == ':' &&
+				isdigit(sentence[j + 3]) && isdigit(sentence[j + 4]))
 			{
-				if (isdigit(text->sentences[i].sentence[j]) && isdigit(text->sentences[i].sentence[j + 1]) && text->sentences[i].sentence[j + 2] == ':' && isdigit(text->sentences[i].sentence[j + 3]) && isdigit(text->sentences[i].sentence[j + 4]))
+
+				int hours = (sentence[j] - '0') * 10 + (sentence[j + 1] - '0');
+				int mins = (sentence[j + 3] - '0') * 10 + (sentence[j + 4] - '0');
+
+				if (hours >= 0 && hours <= 23 && mins >= 0 && mins <= 59)
 				{
-					char hours_s[2];
-					char mins_s[2];
-					hours_s[0] = text->sentences[i].sentence[j];
-					hours_s[1] = text->sentences[i].sentence[j + 1];
-
-					mins_s[0] = text->sentences[i].sentence[j];
-					mins_s[1] = text->sentences[i].sentence[j + 1];
-					int mins = atoi(mins_s);
-					int hours = atoi(hours_s);
 					int totalMinutes = hours * 60 + mins;
-
 					printf("Подстрока в предложении %d, минут до текущего времени: %d\n", i + 1, totalMinutes - currentMinutes);
-					break;
 				}
+				else
+					printf("\033[1;33mError:\033[0m \033[91mIncorrect time format in %d sentences\033[0m\n", i + 1);
+
+				break;
 			}
 		}
-		else
-			continue;
 	}
 }
-
-// void findSubStr(Text *text)
-// {
-// 	time_t currentTime = time(NULL);
-// 	struct tm *localTime = localtime(&currentTime);
-// 	int currentMinutes = localTime->tm_hour * 60 + localTime->tm_min;
-
-// 	for (int i = 0; i < text->num_sentences; ++i)
-// 	{
-
-// 		//char *timeToken = strtok(text->sentences[i].sentence, ":");
-// 		for (size_t j = 0; j < strlen(text->sentences[i].sentence) - 5; j++)
-// 		{
-// 			printf("%c", text->sentences[i].sentence[j]);
-// 			// if (isdigit(sentence[j]) && isdigit(sentence[j+1]) && sentence[j+2] == ':' && isdigit(sentence[j+3]) && isdigit(sentence[j+4])){
-// 			// 	printf("%c", sentence[j]);
-// 			// 	printf("%c", sentence[j+1]);
-// 			// 	printf("%c", sentence[j+2]);
-// 			// 	printf("%c", sentence[j+3]);
-// 			// 	printf("%c", sentence[j+4]);
-// 			// 	break;
-// 			// }
-// 		}
-// 		printf("\n");
-
-// 		// if (timeToken != NULL)
-// 		// {
-// 		// 	int hours = atoi(timeToken);
-// 		// 	printf("%d", hours);
-// 		// 	timeToken = strtok(NULL, ":");
-// 		// 	if (timeToken != NULL)
-// 		// 	{
-// 		// 		int minutes = atoi(timeToken);
-// 		// 		int totalMinutes = hours * 60 + minutes;
-
-// 		// 		int minutesDifference = totalMinutes - currentMinutes;
-// 		// 		printf("Подстрока в предложении %d, минут до текущего времени: %d\n", i + 1, minutesDifference);
-// 		// 	}
-// 		// }
-// 	}
-// }
