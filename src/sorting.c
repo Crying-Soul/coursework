@@ -1,5 +1,4 @@
 #include <stdlib.h>
-#include "structures.h"
 #include "sorting.h"
 #include "counting.h"
 

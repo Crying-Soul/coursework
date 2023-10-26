@@ -1,4 +1,3 @@
-#include "structures.h"
 #include "counting.h"
 
 int cyrillicCounter(const Sentence *sentence)

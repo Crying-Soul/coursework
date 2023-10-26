@@ -16,7 +16,6 @@ void logErr(const char *format, ...)
     vprintf(format, args);
     printf("\n");
 #endif
-
     va_end(args);
 }
 

@@ -2,7 +2,9 @@
 #include <stdlib.h>
 #include "input.h"
 #include "memory.h"
+
 #define MEMORY_CHUNK 20;
+
 char *getTextInput()
 {
 	int end = 0, size = 0, capacity = MEMORY_CHUNK;

@@ -2,8 +2,7 @@
 #include <locale.h>
 #include <ctype.h>
 #include "log.h"
-#include "txtprocessing.h"
-#include "structures.h"
+#include "txtprocessing.h"  
 #include "counting.h"
 #include "sorting.h"
 #define SENTENCE_SPLITTERS ".?!;"
