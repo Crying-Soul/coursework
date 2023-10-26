@@ -8,12 +8,19 @@
 #include "datastructures.h"
 
 #define MEMORY_CHUNK 20;
-
+void checkMemoryAllocation(void *ptr, const char *errorMessage) {
+    if (ptr == NULL) {
+        fprintf(stderr, "Error: %s\n", errorMessage);
+		logErr("%s", errorMessage);
+        exit(EXIT_FAILURE);
+    }
+}
 char *getTextInput()
 {
 	int end = 0, size = 0, capacity = MEMORY_CHUNK;
 	char ch;
 	char *text = malloc(capacity * sizeof(char));
+	checkMemoryAllocation(text, "Insufficient memory for text structure");
 	while ((ch = getchar()) && (end < 2))
 	{
 		if (ch == '\n')
@@ -26,11 +33,13 @@ char *getTextInput()
 			{
 				capacity += MEMORY_CHUNK;
 				text = realloc(text, capacity * sizeof(char));
+				checkMemoryAllocation(text, "Insufficient memory for text structure");
 			}
 			text[size++] = ch;
 		}
 	}
 	text = realloc(text, (size + 1) * sizeof(char));
+	checkMemoryAllocation(text, "Insufficient memory for text structure");
 	text[size] = '\0';
 	return text;
 }
@@ -95,7 +104,7 @@ Text split_text(char *raw_text, const char *spliters)
 	Text text;
 	text.num_sentences = 0;
 	text.sentences = malloc(sizeof(Sentence));
-
+	checkMemoryAllocation(text.sentences, "Insufficient memory for text structure");
 	for (size_t i = 0; i <= strlen(raw_text); i++)
 	{
 		if (strchr(spliters, raw_text[i]) != NULL)
@@ -105,6 +114,7 @@ Text split_text(char *raw_text, const char *spliters)
 
 			text.sentences = realloc(text.sentences, text.num_sentences * sizeof(Sentence));
 			text.sentences[text.num_sentences - 1].sentence = malloc((end_index + 1) * sizeof(char));
+			checkMemoryAllocation(text.sentences[text.num_sentences - 1].sentence, "Insufficient memory for text structure");
 
 			chr_counter = 0;
 
@@ -127,6 +137,7 @@ Text *createTextStruct(const char *spliters)
 {
 	char *raw_text = getTextInput();
 	Text *text = malloc(sizeof(Text));
+	checkMemoryAllocation(text, "Insufficient memory for text structure");
 
 	*text = split_text(raw_text, spliters);
 	removeRepeats(text);
@@ -178,6 +189,7 @@ void removeWithoutSpecialChars(Text *text)
 
 	text->num_sentences = validSentenceCount;
 	text->sentences = realloc(text->sentences, sizeof(Sentence) * validSentenceCount);
+	checkMemoryAllocation(text->sentences, "Memory override error for text structure");
 }
 void findSubStr(Text *text)
 {
@@ -207,7 +219,6 @@ void findSubStr(Text *text)
 				{
 					int totalMinutes = hours * 60 + mins;
 					logInfoDefault("Подстрока в предложении %d, минут до текущего времени: %d", i + 1, totalMinutes - currentMinutes);
-					
 				}
 				else
 					logWarn("Incorrect time format in %d sentences", i + 1);
