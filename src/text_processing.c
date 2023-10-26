@@ -3,6 +3,7 @@
 #include <ctype.h>
 #include <stdio.h>
 #include <time.h>
+#include "log.h"
 #include "text_processing.h"
 #include "datastructures.h"
 
@@ -113,14 +114,12 @@ Text split_text(char *raw_text, const char *spliters)
 			}
 			text.sentences[text.num_sentences - 1].sentence[chr_counter] = '\0';
 			removeLeadSpaces(text.sentences[text.num_sentences - 1].sentence);
-			
+
 			end_index = 0;
 			continue;
 		}
 		end_index++;
 	}
-	printf("\n");
-	printf("\n");
 	return text;
 }
 
@@ -161,19 +160,18 @@ void sortTextByCyrillic(Text *text)
 
 void removeWithoutSpecialChars(Text *text)
 {
+
 	int validSentenceCount = 0;
 	const char *specialChars = "!@#$%^&*()_+-={}[]|\\:;\"'<>,?/";
 	for (int i = 0; i < text->num_sentences; ++i)
 	{
 		if (strpbrk(text->sentences[i].sentence, specialChars) != NULL)
 		{
-
 			text->sentences[validSentenceCount] = text->sentences[i];
 			validSentenceCount++;
 		}
 		else
 		{
-
 			free(text->sentences[i].sentence);
 		}
 	}
@@ -208,11 +206,11 @@ void findSubStr(Text *text)
 				if (hours >= 0 && hours <= 23 && mins >= 0 && mins <= 59)
 				{
 					int totalMinutes = hours * 60 + mins;
-					printf("Подстрока в предложении %d, минут до текущего времени: %d\n", i + 1, totalMinutes - currentMinutes);
+					logInfoDefault("Подстрока в предложении %d, минут до текущего времени: %d", i + 1, totalMinutes - currentMinutes);
+					
 				}
 				else
-					printf("\033[1;33mError:\033[0m \033[91mIncorrect time format in %d sentences\033[0m\n", i + 1);
-
+					logWarn("Incorrect time format in %d sentences", i + 1);
 				break;
 			}
 		}

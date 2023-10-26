@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Iinclude -Wall -Wextra
+CFLAGS = -Iinclude -Wall -Wextra -DLOG_USE_COLOR
 
 SRCDIR = src
 INCDIR = include

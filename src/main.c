@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <locale.h>
 #include <ctype.h>
+#include "log.h"
 #include "text_processing.h"
 #include "datastructures.h"
 
@@ -13,7 +14,8 @@ void userInputProcessing(int nextMove, Text *text);
 int main(void)
 {
     setlocale(LC_ALL, "ru_RU.UTF-8");
-    printf("\033[92m%s\033[0m\n", "Course work for option 5.11, created by Egor Grebnev.");
+
+    logInfo("%s", "Course work for option 5.11, created by Egor Grebnev.");
     processInput();
     return 0;
 }
@@ -40,7 +42,7 @@ void userInputProcessing(int nextMove, Text *text)
         printText(text);
         break;
     default:
-        printf("\033[1;33mError:\033[0m \033[91m%s\033[0m", "Undefined function, try 0-5\n");
+        printf("\033[1;33mError:\033[0m\033[91m%s\033[0m", "Undefined function, try 0-5\n");
         break;
     }
 }
@@ -62,7 +64,7 @@ void processInput()
         return;
     }
 
-    printf("\033[1;33mError:\033[0m  \033[91m%s\033[0m", "Print numeric function\n");
+    printf("\033[1;33mError:\033[0m\033[91m%s\033[0m", "Print numeric function\n");
 }
 void printHelp()
 {
