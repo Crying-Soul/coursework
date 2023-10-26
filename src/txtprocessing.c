@@ -4,45 +4,10 @@
 #include <stdio.h>
 #include <time.h>
 #include "log.h"
-#include "text_processing.h"
-#include "datastructures.h"
-
-#define MEMORY_CHUNK 20;
-void checkMemoryAllocation(void *ptr, const char *errorMessage) {
-    if (ptr == NULL) {
-        fprintf(stderr, "Error: %s\n", errorMessage);
-		logErr("%s", errorMessage);
-        exit(EXIT_FAILURE);
-    }
-}
-char *getTextInput()
-{
-	int end = 0, size = 0, capacity = MEMORY_CHUNK;
-	char ch;
-	char *text = malloc(capacity * sizeof(char));
-	checkMemoryAllocation(text, "Insufficient memory for text structure");
-	while ((ch = getchar()) && (end < 2))
-	{
-		if (ch == '\n')
-			end++;
-
-		else
-		{
-			end = 0;
-			if (size >= capacity - 1)
-			{
-				capacity += MEMORY_CHUNK;
-				text = realloc(text, capacity * sizeof(char));
-				checkMemoryAllocation(text, "Insufficient memory for text structure");
-			}
-			text[size++] = ch;
-		}
-	}
-	text = realloc(text, (size + 1) * sizeof(char));
-	checkMemoryAllocation(text, "Insufficient memory for text structure");
-	text[size] = '\0';
-	return text;
-}
+#include "txtprocessing.h"
+#include "structures.h"
+#include "memory.h"
+#include "input.h"
 
 void removeUpperCaseLettersSentence(Sentence *sentence)
 {
@@ -146,34 +111,11 @@ Text *createTextStruct(const char *spliters)
 	return text;
 }
 
-int cyrillicCounter(const Sentence *sentence)
-{
-	int counter = 0;
-	const char *str = sentence->sentence;
-	while (*str)
-	{
-		if ((*str & 0xC0) == 0xC0 && (*(str + 1) & 0x80) == 0x80)
-			counter++;
-		str++;
-	}
-
-	return counter / 2;
-}
-int compareSentences(const void *sentenceA, const void *sentenceB)
-{
-	return cyrillicCounter((const Sentence *)sentenceB) - cyrillicCounter((const Sentence *)sentenceA);
-}
-
-void sortTextByCyrillic(Text *text)
-{
-	qsort(text->sentences, text->num_sentences, sizeof(Sentence), compareSentences);
-}
-
 void removeWithoutSpecialChars(Text *text)
 {
 
 	int validSentenceCount = 0;
-	const char *specialChars = "!@#$%^&*()_+-={}[]|\\:;\"'<>,?/";
+	const char *specialChars = "!@#№$%^&*()_+-={}[]|\\:;\"'<>,?/";
 	for (int i = 0; i < text->num_sentences; ++i)
 	{
 		if (strpbrk(text->sentences[i].sentence, specialChars) != NULL)

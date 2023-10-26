@@ -1,9 +1,9 @@
 #ifndef DATASTRUCTURES_H
 #define DATASTRUCTURES_H
+
 typedef struct {
     char* sentence;
 } Sentence;
-
 
 typedef struct {
     Sentence* sentences;
@@ -12,4 +12,5 @@ typedef struct {
 
 void freeText(Text* text);
 void printText(Text* text);
+
 #endif

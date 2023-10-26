@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include "datastructures.h"
+#include "structures.h"
 
 void printText(Text* text){
     for (int i = 0; i < text->num_sentences - 1; ++i) {

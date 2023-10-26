@@ -47,7 +47,7 @@ void logWarn(const char *format, ...)
     vprintf(format, args);
     printf("\033[0m\n");
 #else
-    printf("Warning: ");
+    printf("Error: ");
     vprintf(format, args);
 #endif
 
