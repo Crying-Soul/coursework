@@ -8,9 +8,14 @@ The program runs in the command line. Make sure you have a C runtime environment
 
 1. **Compile and run the program**: Enter the following command in the terminal to compile the program:
    ```sh
-    make     
-    ./coursework
-    make clean
+   #compile
+   make
+   
+   #run
+   ./coursework
+   
+   #clear
+   make clean
 
 4. **Debug the program**: Enter the following command in the terminal to compile the program:
    ```sh
