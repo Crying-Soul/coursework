@@ -3,13 +3,14 @@
 int cyrillicCounter(const Sentence *sentence)
 {
 	int counter = 0;
-	const char *str = sentence->sentence;
-	while (*str)
-	{
-		if ((*str & 0xC0) == 0xC0 && (*(str + 1) & 0x80) == 0x80)
-			counter++;
-		str++;
-	}
+	const wchar_t *str = sentence->sentence;
+	 while (*str) {
+        if ((*str >= L'А' && *str <= L'я') || (*str >= L'Ё' && *str <= L'ё')) {
+            counter++;
+        }
+        str++;
+    }
 
-	return counter / 2;
+	return counter;
+	
 }

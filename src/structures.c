@@ -5,7 +5,7 @@
 
 void printText(Text* text){
     for (int i = 0; i < text->num_sentences - 1; ++i) {
-        logInfoDefault("Sentence №%d:%s", (i+1), text->sentences[i].sentence);
+        logInfoDefault(L"Sentence №%d:%ls", (i+1), text->sentences[i].sentence);
     }
 }
 

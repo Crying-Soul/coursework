@@ -2,34 +2,35 @@
 #include <stdlib.h>
 #include "input.h"
 #include "memory.h"
+#include <wchar.h>
 
 #define MEMORY_CHUNK 20;
 
-char *getTextInput()
+wchar_t *getTextInput()
 {
 	int end = 0, size = 0, capacity = MEMORY_CHUNK;
-	char ch;
-	char *text = malloc(capacity * sizeof(char));
-	checkMemoryAllocation(text, "Insufficient memory for text structure");
-	while ((ch = getchar()) && (end < 2))
-	{
-		if (ch == '\n')
-			end++;
+	wint_t ch;
+	wchar_t *text = malloc(capacity * sizeof(wchar_t));
+	checkMemoryAllocation(text, L"Insufficient memory for text structure");
 
+	while ((ch = getwchar()) != WEOF && (end < 2))
+	{
+		if (ch == L'\n')
+		{
+			end++;
+		}
 		else
 		{
 			end = 0;
 			if (size >= capacity - 1)
 			{
 				capacity += MEMORY_CHUNK;
-				text = realloc(text, capacity * sizeof(char));
-				checkMemoryAllocation(text, "Insufficient memory for text structure");
+				text = realloc(text, capacity * sizeof(wchar_t));
+				checkMemoryAllocation(text, L"Insufficient memory for text structure");
 			}
 			text[size++] = ch;
 		}
 	}
-	text = realloc(text, (size + 1) * sizeof(char));
-	checkMemoryAllocation(text, "Insufficient memory for text structure");
-	text[size] = '\0';
-	return text;
+	text[size] = L'\0';
+	return realloc(text, (size + 1) * sizeof(wchar_t));
 }

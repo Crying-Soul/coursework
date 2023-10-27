@@ -1,16 +1,18 @@
 #ifndef DATASTRUCTURES_H
 #define DATASTRUCTURES_H
-
-typedef struct {
-    char* sentence;
+#include <wchar.h>
+typedef struct
+{
+    wchar_t *sentence;
 } Sentence;
 
-typedef struct {
-    Sentence* sentences;
-    int num_sentences; 
+typedef struct
+{
+    Sentence *sentences;
+    int num_sentences;
 } Text;
 
-void freeText(Text* text);
-void printText(Text* text);
+void freeText(Text *text);
+void printText(Text *text);
 
 #endif

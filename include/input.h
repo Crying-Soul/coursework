@@ -1,6 +1,6 @@
 #ifndef INPUTOUTPUT_H
 #define INPUTOUTPUT_H
 
-char* getTextInput();
+wchar_t* getTextInput();
 
 #endif
