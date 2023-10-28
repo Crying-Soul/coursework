@@ -12,12 +12,12 @@ The program runs in the command line. Make sure you have a C runtime environment
    make
    
    #run
-   ./coursework
+   ./cw
    
    #clear
    make clean
 
-4. **Debug the program**: Enter the following command in the terminal to compile the program:
+4. **Debug the program (temporary disabeled)**: Enter the following command in the terminal to compile the program:
    ```sh
    #optional - name of file with tests
     ./debug <optinal>    

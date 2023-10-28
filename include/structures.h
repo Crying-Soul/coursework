@@ -1,6 +1,8 @@
 #ifndef DATASTRUCTURES_H
 #define DATASTRUCTURES_H
+
 #include <wchar.h>
+
 typedef struct
 {
     wchar_t *sentence;
@@ -9,7 +11,7 @@ typedef struct
 typedef struct
 {
     Sentence *sentences;
-    int num_sentences;
+    unsigned int num_sentences;
 } Text;
 
 void freeText(Text *text);

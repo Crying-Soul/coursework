@@ -1,5 +1,6 @@
 CC = gcc
-CFLAGS = -Iinclude -Wall -Wextra -DLOG_USE_COLOR
+CFLAGS = -I$(INCDIR) -Wall -Wextra -g -pedantic -fsanitize=address -fsanitize=undefined -DLOG_USE_COLOR
+RM = rm -rf
 
 SRCDIR = src
 INCDIR = include
@@ -7,7 +8,7 @@ OBJDIR = obj
 
 SOURCES = $(wildcard $(SRCDIR)/*.c)
 OBJECTS = $(patsubst $(SRCDIR)/%.c, $(OBJDIR)/%.o, $(SOURCES))
-EXECUTABLE = coursework
+EXECUTABLE = cw
 
 all: $(EXECUTABLE)
 
@@ -19,4 +20,4 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -rf $(OBJDIR) $(EXECUTABLE)
+	$(RM) $(OBJDIR) $(EXECUTABLE)

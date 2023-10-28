@@ -3,7 +3,7 @@
 
 #include "structures.h"
 
-void sortTextByCyrillic(Text* text);
-int compareSentences(const void *a, const void *b);
+void sortTextByCyrillic(Text *text);
+int compareSentences(const void *sentenceA, const void *sentenceB);
 
 #endif

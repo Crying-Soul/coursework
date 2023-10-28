@@ -1,6 +1,6 @@
-#include <wchar.h>
 #include <stdio.h>
 #include <stdarg.h>
+#include "log.h"
 
 void logErr(const wchar_t *format, ...)
 {

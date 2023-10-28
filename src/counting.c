@@ -1,5 +1,5 @@
 #include "counting.h"
-
+#include "log.h"
 int cyrillicCounter(const Sentence *sentence)
 {
 	int counter = 0;
@@ -10,7 +10,5 @@ int cyrillicCounter(const Sentence *sentence)
         }
         str++;
     }
-
-	return counter;
-	
+    return counter;	
 }
