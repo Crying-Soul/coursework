@@ -16,9 +16,9 @@ void *getTime(const wchar_t *sentence, unsigned int index)
 
     for (unsigned int i = 0; i < sentenceLen - TIME_FORMAT; i++)
 
-        if (iswdigit(sentence[i]) && iswdigit(sentence[i + 1]) &&
+        if (iswdigit((wint_t)sentence[i]) && iswdigit((wint_t)sentence[i + 1]) &&
             sentence[i + 2] == L':' &&
-            iswdigit(sentence[i + 3]) && iswdigit(sentence[i + 4]))
+            iswdigit((wint_t)sentence[i + 3]) && iswdigit((wint_t)sentence[i + 4]))
         {
             int hours = (sentence[i] - L'0') * 10 + (sentence[i + 1] - L'0');
             int mins = (sentence[i + 3] - L'0') * 10 + (sentence[i + 4] - L'0');
@@ -44,7 +44,7 @@ void processTime(int *sentenceTime, unsigned int index)
     int currentMinutes = localTime->tm_hour * 60 + localTime->tm_min;
 
     int totalMinutes = sentenceTime[0] * 60 + sentenceTime[1];
-    logInfoDefault(L"Подстрока в предложении %d, минут до текущего времени: %d", index + 1, totalMinutes - currentMinutes);
+    logInfoDefault(L"Подстрока в предложении %d, минут до текущего времени: %d", index + 1, abs(totalMinutes - currentMinutes));
 }
 void findTimeInSentences(Text *text)
 {

@@ -9,8 +9,8 @@
 #define SENTENCE_SPLITTERS L".?!;"
 #define LANGUAGE_LOCALE ""
 
-void printHelp();
-void processInput();
+void printHelp(void);
+void processInput(void);
 void userInputProcessing(int nextMove, Text *text);
 
 int main(void)
@@ -21,13 +21,13 @@ int main(void)
     processInput();
     return 0;
 }
-void processInput()
+void processInput(void)
 {
     wint_t charMove = getwchar();
 
     if (iswdigit(charMove))
     {
-        int intMove = charMove - L'0';
+        int intMove = (int)charMove - L'0';
         if (intMove != 5)
         {
             Text *text = createTextStruct(SENTENCE_SPLITTERS);
@@ -69,7 +69,7 @@ void userInputProcessing(int nextMove, Text *text)
     }
 }
 
-void printHelp()
+void printHelp(void)
 {
 #ifdef LOG_USE_COLOR
     logInfoDefault(L"\033[1;36mСправка по функциям:\033[0m");

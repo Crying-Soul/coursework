@@ -5,9 +5,9 @@
 
 #define MEMORY_CHUNK 20;
 
-wchar_t *getTextInput()
+wchar_t *getTextInput(void)
 {
-	int end = 0, size = 0, capacity = MEMORY_CHUNK;
+	unsigned long end = 0, size = 0, capacity = MEMORY_CHUNK;
 	wint_t ch;
 	wchar_t *text = (wchar_t *)malloc(capacity * sizeof(wchar_t));
 	checkMemoryAllocation(text, L"Insufficient memory for text structure");
@@ -27,7 +27,7 @@ wchar_t *getTextInput()
 				text = (wchar_t *)realloc(text, capacity * sizeof(wchar_t));
 				checkMemoryAllocation(text, L"Insufficient memory for text structure");
 			}
-			text[size++] = ch;
+			text[size++] = (wchar_t)ch;
 		}
 	}
 	text[size] = L'\0';

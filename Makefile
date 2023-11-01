@@ -1,5 +1,7 @@
 CC = gcc
-CFLAGS = -I$(INCDIR) -Wall -Wextra -g -pedantic -fsanitize=address -fsanitize=undefined -DLOG_USE_COLOR
+DEBUG_FLAGS = -fsanitize=address -fsanitize=undefined
+COLOR_FLAG = -DLOG_USE_COLOR 
+CFLAGS = -I$(INCDIR) $(DEBUG_FLAGS) $(COLOR_FLAG) -pedantic -Wall -Wextra -Wformat -Wshadow -Wpointer-arith -Wcast-qual -Wstrict-prototypes -Wmissing-prototypes -Wstrict-overflow -Wundef -Wnested-externs -Wunreachable-code -Wlogical-op -Wvla -Wdisabled-optimization -Wcast-align -Wconversion -Wsign-compare -Wwrite-strings -Wimplicit-fallthrough -Wno-multichar
 RM = rm -rf
 
 SRCDIR = src

@@ -11,7 +11,7 @@ void removeUpperCaseLettersSentence(Sentence *sentence)
 	int j = 0;
 	for (int i = 0; input[i] != L'\0'; ++i)
 	{
-		if (!iswupper(input[i]))
+		if (!iswupper((wint_t)input[i]))
 		{
 			input[j++] = input[i];
 		}
@@ -52,7 +52,7 @@ void removeRepeats(Text *text)
 void removeLeadSpaces(wchar_t *str)
 {
 	wchar_t *start = str;
-	while (*start && (iswspace(*start) || *start == L'\t'))
+	while (*start && (iswspace((wint_t)*start) || *start == L'\t'))
 	{
 		start++;
 	}
@@ -73,14 +73,14 @@ Text split_text(const wchar_t *raw_text, const wchar_t *spliters)
 			text.num_sentences++;
 
 			text.sentences = (Sentence *)realloc(text.sentences, text.num_sentences * sizeof(Sentence));
-			text.sentences[text.num_sentences - 1].sentence = (wchar_t *)malloc((end_index + 2) * sizeof(wchar_t));
+			text.sentences[text.num_sentences - 1].sentence = (wchar_t *)malloc((long unsigned)(end_index + 2) * sizeof(wchar_t));
 			checkMemoryAllocation(text.sentences[text.num_sentences - 1].sentence, L"Insufficient memory for text structure");
 
 			chr_counter = 0;
 
 			for (int j = end_index; j >= 0; j--)
 			{
-				text.sentences[text.num_sentences - 1].sentence[chr_counter++] = raw_text[i - j];
+				text.sentences[text.num_sentences - 1].sentence[chr_counter++] = raw_text[i - (size_t)j];
 			}
 			text.sentences[text.num_sentences - 1].sentence[chr_counter] = L'\0';
 			removeLeadSpaces(text.sentences[text.num_sentences - 1].sentence);
@@ -114,7 +114,7 @@ void removeWithoutSpecialChars(Text *text)
 		wchar_t *sentence = text->sentences[i].sentence;
 		int hasSpecialChars = 0;
 		for (size_t j = 0; !hasSpecialChars && sentence[j + 1] != L'\0'; ++j)
-			hasSpecialChars = !iswalnum(sentence[j]) && !iswspace(sentence[j]);
+			hasSpecialChars = !iswalnum((wint_t)sentence[j]) && !iswspace((wint_t)sentence[j]);
 
 		if (hasSpecialChars)
 			text->sentences[validSentenceCount++] = text->sentences[i];
