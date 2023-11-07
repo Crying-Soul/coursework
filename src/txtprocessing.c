@@ -12,9 +12,7 @@ void removeUpperCaseLettersSentence(Sentence *sentence)
 	for (int i = 0; input[i] != L'\0'; ++i)
 	{
 		if (!iswupper((wint_t)input[i]))
-		{
 			input[j++] = input[i];
-		}
 	}
 	input[j] = L'\0';
 }
@@ -22,9 +20,7 @@ void removeUpperCaseLettersSentence(Sentence *sentence)
 void removeUpperCaseLettersText(Text *text)
 {
 	for (unsigned int i = 0; i < text->num_sentences; ++i)
-	{
 		removeUpperCaseLettersSentence(&(text->sentences[i]));
-	}
 }
 
 void removeRepeats(Text *text)
@@ -53,9 +49,8 @@ void removeLeadSpaces(wchar_t *str)
 {
 	wchar_t *start = str;
 	while (*start && (iswspace((wint_t)*start) || *start == L'\t'))
-	{
 		start++;
-	}
+
 	wmemmove(str, start, wcslen(start) + 1);
 }
 Text split_text(const wchar_t *raw_text, const wchar_t *spliters)
@@ -79,9 +74,8 @@ Text split_text(const wchar_t *raw_text, const wchar_t *spliters)
 			chr_counter = 0;
 
 			for (int j = end_index; j >= 0; j--)
-			{
 				text.sentences[text.num_sentences - 1].sentence[chr_counter++] = raw_text[i - (size_t)j];
-			}
+			
 			text.sentences[text.num_sentences - 1].sentence[chr_counter] = L'\0';
 			removeLeadSpaces(text.sentences[text.num_sentences - 1].sentence);
 
@@ -97,12 +91,10 @@ Text *createTextStruct(const wchar_t *spliters)
 {
 	Text *text = (Text *)malloc(sizeof(Text));
 	checkMemoryAllocation(text, L"Insufficient memory for text structure");
-
 	wchar_t *raw_text = getTextInput();
 	*text = split_text(raw_text, spliters);
 	removeRepeats(text);
 	free(raw_text);
-
 	return text;
 }
 

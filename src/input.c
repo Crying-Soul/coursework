@@ -15,9 +15,7 @@ wchar_t *getTextInput(void)
 	while ((ch = getwchar()) != WEOF && (end < 2))
 	{
 		if (ch == L'\n')
-		{
 			end++;
-		}
 		else
 		{
 			end = 0;
